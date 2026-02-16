@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PILLAR II: SDI Concept Demo (v1.8)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+        body { background-color: #050505; color: #fff; font-family: 'JetBrains Mono', monospace; }
+        
+        #display-substrate {
+            width: 100%;
+            max-width: 480px;
+            height: 280px;
+            background: #000000; /* Background stays BLACK */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 2.5rem;
+            border: 1px solid #111;
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+        }
+        
+        .glow-border {
+            border: 1px solid #1f2937;
+            transition: all 0.3s ease;
+        }
+        
+        .active-glow {
+            border-color: #3b82f6;
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.15);
+        }
+
+        #content-signal {
+            position: relative;
+            z-index: 30;
+            color: #fff; /* Default static */
+            filter: blur(0.2px); /* Slight blur to reduce flicker perception */
+            text-shadow: 0 0 5px rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-6">
+
+    <div class="max-w-2xl w-full bg-[#0a0c10] p-10 rounded-2xl glow-border shadow-2xl space-y-8" id="container">
+        <header class="text-center space-y-1">
+            <h1 class="text-blue-500 font-bold text-sm uppercase tracking-[0.3em]">Safe Haven Foundation</h1>
+            <h2 class="text-white font-bold text-xl uppercase tracking-tighter">Sovereign Display Integrity (SDI)</h2>
+            <p class="text-[10px] text-gray-500 uppercase mt-2 tracking-widest">Iso-Luminant Concept Demo v1.8 (60Hz)</p>
+        </header>
+
+        <div id="display-substrate" class="mx-auto rounded-lg">
+            <span id="content-signal">PROTECTED_SIGNAL</span>
+        </div>
+
+        <div class="space-y-6">
+            <div class="flex justify-between items-center text-[10px] font-bold tracking-widest uppercase border-b border-gray-900 pb-2">
+                <span class="text-gray-500">Rendering Mode:</span>
+                <span id="mode-label" class="text-rose-500">LEGACY (STATIC)</span>
+            </div>
+            
+            <button onclick="toggleSDI()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-blue-900/20">
+                Toggle Sovereign Rendering
+            </button>
+        </div>
+
+        <div class="bg-black/40 p-4 rounded-lg border border-gray-900/50">
+            <p class="text-[9px] text-gray-600 leading-relaxed uppercase tracking-wider text-center">
+                <strong>NOTE:</strong> This is a browser-based <strong>Concept Demo</strong> running at 60Hz.<br>
+                It illustrates the principle of Temporal Aliasing where the biological eye integrates the signal, but digital capture devices capture the disruption.<br>
+                <strong>Production Implementation:</strong> Operates at hardware level (120Hz+) with zero perceptible flicker.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let sdiActive = false;
+        const textElement = document.getElementById('content-signal');
+        const label = document.getElementById('mode-label');
+        const container = document.getElementById('container');
+        
+        let frame = 0;
+
+        function animateSDI() {
+            if (sdiActive) {
+                frame++;
+                // Toggle Text Color every frame (Targeting 60Hz)
+                if (frame % 2 === 0) {
+                    // Frame A: Magenta (Luminance ~54%)
+                    textElement.style.color = '#FF00FF'; 
+                    textElement.style.textShadow = '0 0 8px #FF00FF';
+                } else {
+                    // Frame B: Green (Luminance ~59%)
+                    textElement.style.color = '#00FF00'; 
+                    textElement.style.textShadow = '0 0 8px #00FF00';
+                }
+            }
+            requestAnimationFrame(animateSDI);
+        }
+
+        function toggleSDI() {
+            sdiActive = !sdiActive;
+            if (sdiActive) {
+                container.classList.add('active-glow');
+                label.innerText = "SOVEREIGN (ACTIVE)";
+                label.classList.replace('text-rose-500', 'text-emerald-500');
+            } else {
+                container.classList.remove('active-glow');
+                textElement.style.color = '#fff'; // Reset to White
+                textElement.style.textShadow = '0 0 5px rgba(255,255,255,0.3)';
+                label.innerText = "LEGACY (STATIC)";
+                label.classList.replace('text-emerald-500', 'text-rose-500');
+            }
+        }
+
+        animateSDI();
+    </script>
+</body>
+</html>
